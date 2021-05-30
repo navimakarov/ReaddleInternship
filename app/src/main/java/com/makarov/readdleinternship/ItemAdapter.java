@@ -5,10 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -68,8 +70,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             holder.username.setText(profile.getUsername());
         }
 
-        Picasso.get().load(profile.getAvatarUrl()).error(R.drawable.default_icon)
-                .into((ImageView) holder.userAvatar);
+        Picasso.get().load(profile.getAvatarUrl()).error(R.drawable.default_icon).resize(48, 48).into((ImageView) holder.userAvatar, new Callback() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Toast.makeText(holder.avatarView.getContext(), String.valueOf(e), Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 

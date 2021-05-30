@@ -10,9 +10,12 @@ import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.makarov.readdleinternship.ItemAdapter.SPAN_LIST_COUNT;
 import static com.makarov.readdleinternship.ItemAdapter.SPAN_GRID_COUNT;
@@ -55,11 +58,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addUsers() {
-        profiles = new ArrayList<>(20);
-        for(int i = 0; i < 20; i++) {
-            profiles.add(new Profile(true, String.valueOf(i), String.valueOf(i)));
+        profiles = new ArrayList<>();
+
+        for(int i = 0; i < 5; i++) {
+            profiles.add(new Profile("Ivan Makarov",
+                    "makarov18042003@gmail.com", randomBoolean()));
         }
 
+        for(int i = 0; i < 20; i++) {
+            profiles.add(new Profile("Name #" + String.valueOf(i),
+                    "test"+String.valueOf(i)+"@ukr.net",
+                    randomBoolean()));
+        }
+
+
+    }
+
+    private boolean randomBoolean() {
+        return Math.random() < 0.5;
     }
 
     @Override

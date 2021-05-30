@@ -1,16 +1,17 @@
 package com.makarov.readdleinternship;
 
+import android.widget.ImageView;
 import fr.tkeunebr.gravatar.Gravatar;
 
 public class Profile {
     private boolean isOnline;
     private String username, email, avatarUrl;
 
-    public Profile(boolean isOnline, String username, String email) {
+    public Profile(String username, String email, boolean isOnline) {
         this.isOnline = isOnline;
         this.username = username;
         this.email = email;
-
+        
         this.avatarUrl = Gravatar.init().with(this.email).defaultImage(Gravatar.DefaultImage.MYSTERY_MAN).size(48).build();
     }
 
