@@ -1,6 +1,8 @@
 package com.makarov.readdleinternship;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,9 +74,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             holder.username.setText(profile.getUsername());
         }
 
-        Picasso.get().load(profile.getAvatarUrl()).error(R.drawable.default_icon)
-                .resize(48, 48).into((ImageView) holder.userAvatar);
-
+        Picasso.get().load(profile.getAvatarUrl()).error(R.drawable.default_icon).into((ImageView) holder.userAvatar);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            holder.userAvatar.setTransitionName("profilePicture" + position);
+        }
         holder.itemView.setTag(position);
     }
 
@@ -102,9 +106,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    CircleImageView profilePicture = view.findViewById(R.id.userAvatar);
                     Intent detailsIntent = new Intent(itemView.getContext(), DetailsActivity.class);
                     detailsIntent.putExtra("index", itemView.getTag().toString());
-                    itemView.getContext().startActivity(detailsIntent);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        detailsIntent.putExtra("transition_name", profilePicture.getTransitionName());
+                        ActivityOptionsCompat options = ActivityOptionsCompat.
+                                makeSceneTransitionAnimation((Activity) itemView.getContext(), (View)profilePicture, profilePicture.getTransitionName());
+                        itemView.getContext().startActivity(detailsIntent, options.toBundle());
+                    } else {
+                        itemView.getContext().startActivity(detailsIntent);
+                    }
                 }
             });
         }

@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
-    private static List<Profile> profiles = new ArrayList<>();
+    private static List<Profile> profiles;
 
     public static void initData() {
+        profiles = new ArrayList<>();
         for(int i = 0; i < 5; i++) {
             profiles.add(new Profile("Ivan Makarov",
                     "makarov18042003@gmail.com", randomBoolean()));
