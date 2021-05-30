@@ -9,12 +9,14 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
-    public static final int SPAN_COUNT_ONE = 1;
-    public static final int SPAN_COUNT_FIVE = 5;
+    public static final int SPAN_LIST_COUNT = 1;
+    public static final int SPAN_GRID_COUNT = 5;
 
     private static final int VIEW_TYPE_SMALL = 1;
     private static final int VIEW_TYPE_BIG = 2;
@@ -30,7 +32,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @Override
     public int getItemViewType(int position) {
         int spanCount = layoutManager.getSpanCount();
-        if(spanCount == SPAN_COUNT_ONE) {
+        if(spanCount == SPAN_LIST_COUNT) {
             return VIEW_TYPE_BIG;
         }
         else {
@@ -63,6 +65,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         if(getItemViewType(position) == VIEW_TYPE_BIG) {
             holder.username.setText(profile.getUsername());
         }
+
+        Picasso.get().load(profile.getAvatarUrl()).error(R.drawable.default_icon)
+                .into(holder.userAvatar);
+
     }
 
 

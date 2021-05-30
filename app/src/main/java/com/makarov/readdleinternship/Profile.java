@@ -1,5 +1,7 @@
 package com.makarov.readdleinternship;
 
+import fr.tkeunebr.gravatar.Gravatar;
+
 public class Profile {
     private boolean isOnline;
     private String username, email, avatarUrl;
@@ -9,7 +11,7 @@ public class Profile {
         this.username = username;
         this.email = email;
 
-        //this.avatarUrl = Gravatar.init().with(this.email).size(48).build();
+        this.avatarUrl = Gravatar.init().with(this.email).defaultImage(Gravatar.DefaultImage.MYSTERY_MAN).size(48).build();
     }
 
     public String getUsername() {

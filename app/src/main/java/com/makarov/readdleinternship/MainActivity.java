@@ -14,8 +14,8 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.makarov.readdleinternship.ItemAdapter.SPAN_COUNT_ONE;
-import static com.makarov.readdleinternship.ItemAdapter.SPAN_COUNT_FIVE;
+import static com.makarov.readdleinternship.ItemAdapter.SPAN_LIST_COUNT;
+import static com.makarov.readdleinternship.ItemAdapter.SPAN_GRID_COUNT;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         addUsers();
-        gridLayoutManager = new GridLayoutManager(this, SPAN_COUNT_ONE);
+        gridLayoutManager = new GridLayoutManager(this, SPAN_LIST_COUNT);
         itemAdapter = new ItemAdapter(profiles, gridLayoutManager);
         recyclerView = (RecyclerView) findViewById(R.id.contacts_recView);
         recyclerView.setAdapter(itemAdapter);
@@ -39,11 +39,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(gridLayoutManager.getSpanCount() == SPAN_COUNT_ONE) {
-            outState.putInt("SPAN_COUNT", SPAN_COUNT_ONE);
+        if(gridLayoutManager.getSpanCount() == SPAN_LIST_COUNT) {
+            outState.putInt("SPAN_COUNT", SPAN_LIST_COUNT);
         }
         else {
-            outState.putInt("SPAN_COUNT", SPAN_COUNT_FIVE);
+            outState.putInt("SPAN_COUNT", SPAN_GRID_COUNT);
         }
     }
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem switchLayoutItem = menu.findItem(R.id.switch_layout_menu_item);
-        if(gridLayoutManager.getSpanCount() == SPAN_COUNT_ONE) {
+        if(gridLayoutManager.getSpanCount() == SPAN_LIST_COUNT) {
             switchLayoutItem.setTitle(R.string.grid_menu_item_name);
         }
         else {
@@ -88,11 +88,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void switchLayout() {
-        if(gridLayoutManager.getSpanCount() == SPAN_COUNT_ONE) {
-            gridLayoutManager.setSpanCount(SPAN_COUNT_FIVE);
+        if(gridLayoutManager.getSpanCount() == SPAN_LIST_COUNT) {
+            gridLayoutManager.setSpanCount(SPAN_GRID_COUNT);
         }
         else {
-            gridLayoutManager.setSpanCount(SPAN_COUNT_ONE);
+            gridLayoutManager.setSpanCount(SPAN_LIST_COUNT);
         }
         itemAdapter.notifyItemRangeChanged(0, itemAdapter.getItemCount());
     }
