@@ -13,6 +13,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
     public static final int SPAN_LIST_COUNT = 1;
@@ -67,7 +69,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         }
 
         Picasso.get().load(profile.getAvatarUrl()).error(R.drawable.default_icon)
-                .into(holder.userAvatar);
+                .into((ImageView) holder.userAvatar);
 
     }
 
@@ -79,7 +81,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
         View avatarView;
-        ImageView userAvatar, userOnline;
+        CircleImageView  userAvatar;
+        ImageView userOnline;
         TextView username;
 
         ItemViewHolder(View itemView, int viewType) {
