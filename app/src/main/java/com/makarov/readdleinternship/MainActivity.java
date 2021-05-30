@@ -6,16 +6,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static com.makarov.readdleinternship.ItemAdapter.SPAN_LIST_COUNT;
 import static com.makarov.readdleinternship.ItemAdapter.SPAN_GRID_COUNT;
@@ -24,16 +18,15 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     private GridLayoutManager gridLayoutManager;
-    private List<Profile> profiles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        addUsers();
+        Data.initData();
         gridLayoutManager = new GridLayoutManager(this, SPAN_LIST_COUNT);
-        itemAdapter = new ItemAdapter(profiles, gridLayoutManager);
+        itemAdapter = new ItemAdapter(Data.getProfiles(), gridLayoutManager);
         recyclerView = (RecyclerView) findViewById(R.id.contacts_recView);
         recyclerView.setAdapter(itemAdapter);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -57,26 +50,6 @@ public class MainActivity extends AppCompatActivity {
         itemAdapter.notifyItemRangeChanged(0, itemAdapter.getItemCount());
     }
 
-    private void addUsers() {
-        profiles = new ArrayList<>();
-
-        for(int i = 0; i < 5; i++) {
-            profiles.add(new Profile("Ivan Makarov",
-                    "makarov18042003@gmail.com", randomBoolean()));
-        }
-
-        for(int i = 0; i < 20; i++) {
-            profiles.add(new Profile("Name #" + String.valueOf(i),
-                    "test"+String.valueOf(i)+"@ukr.net",
-                    randomBoolean()));
-        }
-
-
-    }
-
-    private boolean randomBoolean() {
-        return Math.random() < 0.5;
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

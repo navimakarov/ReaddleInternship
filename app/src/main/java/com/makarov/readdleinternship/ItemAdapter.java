@@ -1,5 +1,6 @@
 package com.makarov.readdleinternship;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,18 +71,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             holder.username.setText(profile.getUsername());
         }
 
-        Picasso.get().load(profile.getAvatarUrl()).error(R.drawable.default_icon).resize(48, 48).into((ImageView) holder.userAvatar, new Callback() {
-            @Override
-            public void onSuccess() {
+        Picasso.get().load(profile.getAvatarUrl()).error(R.drawable.default_icon)
+                .resize(48, 48).into((ImageView) holder.userAvatar);
 
-            }
-
-            @Override
-            public void onError(Exception e) {
-                Toast.makeText(holder.avatarView.getContext(), String.valueOf(e), Toast.LENGTH_LONG).show();
-            }
-        });
-
+        holder.itemView.setTag(position);
     }
 
 
@@ -105,6 +98,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             if(viewType == VIEW_TYPE_BIG) {
                 username = itemView.findViewById(R.id.userName);
             }
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent detailsIntent = new Intent(itemView.getContext(), DetailsActivity.class);
+                    detailsIntent.putExtra("index", itemView.getTag().toString());
+                    itemView.getContext().startActivity(detailsIntent);
+                }
+            });
         }
     }
 }

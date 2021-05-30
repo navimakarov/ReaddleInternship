@@ -3,4 +3,6 @@
     <string name="simulate_changes_button">Simulate Changes</string>
     <string name="list_menu_item_name">Show as List</string>
     <string name="grid_menu_item_name">Show as Grid</string>
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
 </resources>
