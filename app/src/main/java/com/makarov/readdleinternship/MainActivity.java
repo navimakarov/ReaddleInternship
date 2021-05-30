@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private ItemAdapter itemAdapter;
     private GridLayoutManager gridLayoutManager;
     private List<Profile> profiles;
-    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +36,24 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(gridLayoutManager);
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(gridLayoutManager.getSpanCount() == SPAN_COUNT_ONE) {
+            outState.putInt("SPAN_COUNT", SPAN_COUNT_ONE);
+        }
+        else {
+            outState.putInt("SPAN_COUNT", SPAN_COUNT_FIVE);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        gridLayoutManager.setSpanCount(savedInstanceState.getInt("SPAN_COUNT"));
+        itemAdapter.notifyItemRangeChanged(0, itemAdapter.getItemCount());
+    }
+
     private void addUsers() {
         profiles = new ArrayList<>(20);
         for(int i = 0; i < 20; i++) {
@@ -48,23 +66,25 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.change_view_menu, menu);
-        this.menu = menu;
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switchLayout();
+        return super.onOptionsItemSelected(item);
+    }
 
-        item.setVisible(false);
-        switch(item.getItemId()) {
-            case R.id.list_menu_item:
-                menu.findItem(R.id.grid_menu_item).setVisible(true);
-                break;
-            case R.id.grid_menu_item:
-                menu.findItem(R.id.list_menu_item).setVisible(true);
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem switchLayoutItem = menu.findItem(R.id.switch_layout_menu_item);
+        if(gridLayoutManager.getSpanCount() == SPAN_COUNT_ONE) {
+            switchLayoutItem.setTitle(R.string.grid_menu_item_name);
         }
-        return true;
+        else {
+            switchLayoutItem.setTitle(R.string.list_menu_item_name);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     private void switchLayout() {
