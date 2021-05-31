@@ -1,6 +1,5 @@
 package com.makarov.readdleinternship;
 
-import android.widget.ImageView;
 import fr.tkeunebr.gravatar.Gravatar;
 
 public class Profile {
@@ -12,7 +11,8 @@ public class Profile {
         this.username = username;
         this.email = email;
         
-        this.avatarUrl = Gravatar.init().with(this.email).defaultImage(Gravatar.DefaultImage.MYSTERY_MAN).size(48).build();
+        this.avatarUrl = Gravatar.init().with(this.email).defaultImage(Gravatar.DefaultImage.MYSTERY_MAN).size(100).build();
+        // get avatar with size 100 (100 - DetailsActivity, 48 - MainActivity)
     }
 
     public String getUsername() {

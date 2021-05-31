@@ -8,13 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -29,10 +28,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private static final int VIEW_TYPE_SMALL = 1;
     private static final int VIEW_TYPE_BIG = 2;
 
-    private List<Profile> profiles;
-    private GridLayoutManager layoutManager;
+    private final List<Profile> profiles;
+    private final GridLayoutManager layoutManager;
 
-    public ItemAdapter(List profiles, GridLayoutManager layoutManager) {
+    public ItemAdapter(List<Profile> profiles, GridLayoutManager layoutManager) {
         this.profiles = profiles;
         this.layoutManager = layoutManager;
     }
@@ -48,8 +47,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         }
     }
 
+    @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         if(viewType == VIEW_TYPE_BIG) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_big, parent, false);
@@ -61,7 +61,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Profile profile = profiles.get(position);
         if(profile.isOnline()) {
             holder.userOnline.setVisibility(View.VISIBLE);
@@ -76,6 +76,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         Picasso.get().load(profile.getAvatarUrl()).error(R.drawable.default_icon).into((ImageView) holder.userAvatar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // if animated transition can be done - assign each avatar with a unique transition name
             holder.userAvatar.setTransitionName("profilePicture" + position);
         }
         holder.itemView.setTag(position);
@@ -87,7 +88,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         return profiles.size();
     }
 
-    class ItemViewHolder extends RecyclerView.ViewHolder {
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
         View avatarView;
         CircleImageView  userAvatar;
         ImageView userOnline;
@@ -103,20 +104,21 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                 username = itemView.findViewById(R.id.userName);
             }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    CircleImageView profilePicture = view.findViewById(R.id.userAvatar);
-                    Intent detailsIntent = new Intent(itemView.getContext(), DetailsActivity.class);
-                    detailsIntent.putExtra("index", itemView.getTag().toString());
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        detailsIntent.putExtra("transition_name", profilePicture.getTransitionName());
-                        ActivityOptionsCompat options = ActivityOptionsCompat.
-                                makeSceneTransitionAnimation((Activity) itemView.getContext(), (View)profilePicture, profilePicture.getTransitionName());
-                        itemView.getContext().startActivity(detailsIntent, options.toBundle());
-                    } else {
-                        itemView.getContext().startActivity(detailsIntent);
-                    }
+            itemView.setOnClickListener(view -> {
+                CircleImageView profilePicture = view.findViewById(R.id.userAvatar);
+
+                Intent detailsIntent = new Intent(itemView.getContext(), DetailsActivity.class);
+                detailsIntent.putExtra("index", itemView.getTag().toString());
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    detailsIntent.putExtra("transition_name", profilePicture.getTransitionName());
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation((Activity) itemView.getContext(), (View)profilePicture, profilePicture.getTransitionName());
+                    itemView.getContext().startActivity(detailsIntent, options.toBundle());
+                }
+                else {
+                    // if animated transition is impossible - start new activity without it
+                    itemView.getContext().startActivity(detailsIntent);
                 }
             });
         }

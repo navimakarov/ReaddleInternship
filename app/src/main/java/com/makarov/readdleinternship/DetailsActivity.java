@@ -12,25 +12,26 @@ import android.widget.TextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DetailsActivity extends AppCompatActivity {
-    private CircleImageView profilePicture;
-    private TextView profileName, profileStatus, profileEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        profilePicture = findViewById(R.id.profilePicture);
-        profileName = findViewById(R.id.profileName);
-        profileStatus = findViewById(R.id.profileStatus);
-        profileEmail = findViewById(R.id.profileEmail);
+        CircleImageView profilePicture = findViewById(R.id.profilePicture);
+        TextView profileName = findViewById(R.id.profileName);
+        TextView profileStatus = findViewById(R.id.profileStatus);
+        TextView profileEmail = findViewById(R.id.profileEmail);
 
         Intent detailsIntent = getIntent();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // if animation is possible - assign profilePicture with transition name in extra
             String imageTransitionName = detailsIntent.getStringExtra("transition_name");
             postponeEnterTransition();
             profilePicture.setTransitionName(imageTransitionName);
@@ -64,6 +65,13 @@ public class DetailsActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Override back button on actionbar onClick
+     * finish activity to get back to MainActivity with chosen layout
+     * layout on MainActivity(list or grid) doesn't reset after getting back
+     * @param item backButton on actionbar
+     * @return true as only one MenuItem present
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

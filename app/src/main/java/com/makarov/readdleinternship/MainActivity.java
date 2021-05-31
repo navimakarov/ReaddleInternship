@@ -5,13 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 
 
@@ -19,7 +16,6 @@ import static com.makarov.readdleinternship.ItemAdapter.SPAN_LIST_COUNT;
 import static com.makarov.readdleinternship.ItemAdapter.SPAN_GRID_COUNT;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     private GridLayoutManager gridLayoutManager;
 
@@ -32,17 +28,14 @@ public class MainActivity extends AppCompatActivity {
 
         gridLayoutManager = new GridLayoutManager(this, SPAN_LIST_COUNT);
         itemAdapter = new ItemAdapter(Data.getProfiles(), gridLayoutManager);
-        recyclerView = (RecyclerView) findViewById(R.id.contacts_recView);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.contacts_recView);
         recyclerView.setAdapter(itemAdapter);
         recyclerView.setLayoutManager(gridLayoutManager);
 
         Button simulate_changes = findViewById(R.id.simulate_changers_btn);
-        simulate_changes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Data.applyRandomChanges();
-                itemAdapter.notifyDataSetChanged();
-            }
+        simulate_changes.setOnClickListener(view -> {
+            Data.applyRandomChanges();
+            itemAdapter.notifyDataSetChanged();
         });
     }
 
