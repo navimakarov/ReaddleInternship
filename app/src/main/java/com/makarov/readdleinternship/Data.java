@@ -7,10 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Data {
-    private static List<Profile> profiles;
+    private static final List<Profile> profiles = new ArrayList<>();
 
     public static void initData() {
-        profiles = new ArrayList<>();
 
         // add 5 profiles with gravatar on the email
         for(int i = 0; i < 5; i++) {

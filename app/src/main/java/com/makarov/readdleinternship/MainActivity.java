@@ -24,7 +24,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Data.initData();
+        // Prevent ANR
+        Thread dataThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Data.initData();
+            }
+        });
+        dataThread.start();
+        try {
+            dataThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
         gridLayoutManager = new GridLayoutManager(this, SPAN_LIST_COUNT);
         itemAdapter = new ItemAdapter(Data.getProfiles(), gridLayoutManager);
